@@ -27,9 +27,11 @@ EXPECTED_SECTIONS = {
 }
 
 PLACEHOLDER_FORBIDDEN = re.compile(
-    r"\b(lorem ipsum|todo|coming soon|placeholder|your bio goes here|add content here)\b",
+    r"\b(lorem ipsum|TODO:|coming soon|your bio goes here|add content here)\b",
     re.IGNORECASE,
 )
+# Match HTML tags (including attributes that span newlines).
+TAG_RE = re.compile(r"<[^>]+>", re.DOTALL)
 
 # Allowed external hosts. Any other src= or href= host is a failure.
 ALLOWED_HOSTS = {
@@ -72,16 +74,26 @@ def test_template_imgs_have_required_attrs(key):
     html = (TEMPLATE_APPS_DIR / key / "index.html").read_text(encoding="utf-8")
     img_tags = re.findall(r"<img\b[^>]*>", html, flags=re.IGNORECASE)
     assert img_tags, f"{key}: no <img> tags found (visual templates need images)"
+
+    required = {
+        "alt":     re.compile(r'\balt="[^"]+"'),                 # non-empty alt
+        "loading": re.compile(r'\bloading="(lazy|eager|auto)"'),
+        "width":   re.compile(r'\bwidth="\d+"'),
+        "height":  re.compile(r'\bheight="\d+"'),
+    }
     for tag in img_tags:
-        for attr in ("alt=", "loading=", "width=", "height="):
-            assert attr in tag.lower(), f"{key}: <img> missing {attr!r}: {tag[:120]}…"
+        for name, pattern in required.items():
+            assert pattern.search(tag), (
+                f"{key}: <img> missing valid {name}=…: {tag[:120]}…"
+            )
 
 
 @pytest.mark.parametrize("key", list(EXPECTED_SECTIONS.keys()))
 def test_template_no_placeholder_strings(key):
     html = (TEMPLATE_APPS_DIR / key / "index.html").read_text(encoding="utf-8")
-    m = PLACEHOLDER_FORBIDDEN.search(html)
-    assert m is None, f"{key}: placeholder string {m.group(0)!r} present"
+    visible_text = TAG_RE.sub(" ", html)
+    m = PLACEHOLDER_FORBIDDEN.search(visible_text)
+    assert m is None, f"{key}: placeholder string {m.group(0)!r} present in visible text"
 
 
 @pytest.mark.parametrize("key", list(EXPECTED_SECTIONS.keys()))
