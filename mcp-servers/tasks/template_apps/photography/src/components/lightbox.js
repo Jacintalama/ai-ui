@@ -1,6 +1,14 @@
 // Lightbox overlay for image galleries.
-// Usage: <div x-data="lightbox" x-init="init()"> ... </div>
-// Each gallery <img> carries data-img-slot="gallery" + data-idx="N" and @click="show(parseInt($el.dataset.idx))".
+// Usage: spread into a parent Alpine state, OR register as Alpine.data("lightbox", lightbox).
+// Each gallery <img> carries data-img-slot="gallery"; gallery card click handlers
+// invoke show(<index>) directly. The parent template wires body-scroll lock via
+// `x-effect="document.body.style.overflow = open ? 'hidden' : ''"` on the overlay.
+//
+// Assumptions (these hold for static templates; revisit if ported to SPA shells):
+//   - Gallery is rendered statically before init() runs (no x-for / dynamic mutation).
+//   - Single page lifetime — keydown listener attaches to document and is never
+//     removed. If reused in a multi-page SPA, store the handler reference and
+//     remove it on a destroy() lifecycle method.
 export const lightbox = () => ({
   open: false,
   src: "",

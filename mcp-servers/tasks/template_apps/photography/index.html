@@ -555,6 +555,7 @@
     <!-- ============================================================ LIGHTBOX ============================================================ -->
     <!-- Lightbox overlay — inside the same Alpine root (photography spreads lightbox state) -->
     <div x-show="open" x-cloak
+         x-effect="document.body.style.overflow = open ? 'hidden' : ''"
          @click.self="open = false"
          class="lightbox-overlay">
       <button type="button" class="lightbox-nav prev" @click.stop="prev()" aria-label="Previous image">
