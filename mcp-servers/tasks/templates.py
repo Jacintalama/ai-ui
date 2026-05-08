@@ -442,6 +442,112 @@ _RULES_SOCIAL_FEED = "\n".join([
     "WITHOUT SUPABASE: localStorage with mock data — agent should pre-seed 5 fake posts + 3 fake users so the UI is browsable, AND show a one-line yellow banner: 'Connect Supabase + enable Auth for real multi-user sharing — this is currently a demo with mock data.'",
 ])
 
+_RULES_AGENCY: str = "\n".join([
+    "PURPOSE: A bold, image-led studio/agency website. Showcases the firm's work, capabilities, clients, and personality.",
+    "TECH: Static HTML + Tailwind CDN + Alpine.js + vanilla ES. No build step. No npm install.",
+    "MUST INCLUDE:",
+    "  • Sticky top nav (logo + 4 anchor links + 'Let's talk' CTA). Solidifies on scroll past hero.",
+    "  • Full-bleed hero with massive headline (animated gradient text), subhead, mouse-follow accent dot.",
+    "  • Infinite-scroll services marquee strip ('Brand · Web · Motion · Strategy ·').",
+    "  • Selected work grid: 6 case-study cards in 2-col layout, hover zoom on image, project name + tags reveal on hover.",
+    "  • Animated stats strip with 4 count-up numbers (Years, Projects, Clients, Awards) triggered on scroll-into-view.",
+    "  • 4 capability cards (Strategy / Brand / Web / Content) with icon + heading + paragraph.",
+    "  • Client logo strip (8–10 SVG wordmarks).",
+    "  • Bold pull-quote testimonial with client photo, name, role.",
+    "  • Full-bleed contact CTA + simulated contact form (toast on submit).",
+    "  • Footer with copyright + social links.",
+    "LAYOUT: charcoal #0a0a0b background, off-white text, lime-electric accent #c1ff00. Inter for body, Space Grotesk for display headings. CSS custom properties --bg, --text, --accent, --serif, --sans control the palette.",
+    "ANIMATIONS PRESENT: .reveal scroll-fade, .zoom-card image hover, .marquee infinite scroll, count-up stats, mouse-follow accent dot, sticky section labels.",
+    "DO NOT REMOVE: the IntersectionObserver in src/main.js, the prefers-reduced-motion guard at the top of styles/main.css.",
+    "SAFE TO CUSTOMIZE: all copy, image URLs (must stay on whitelist: images.unsplash.com, picsum.photos), palette CSS variables, agency name, service offerings, case-study list, client logos, testimonial.",
+    "IMAGE SLOTS (data-img-slot): hero, work (case-study thumbs), avatar (testimonial), logo (client logos).",
+    "TYPOGRAPHY: Inter (body) + Space Grotesk (display) loaded via fonts.googleapis.com.",
+])
+
+_RULES_RESTAURANT: str = "\n".join([
+    "PURPOSE: A warm, atmospheric restaurant or cafe website. Showcases the menu, story, hours, and reservations.",
+    "TECH: Static HTML + Tailwind CDN + Alpine.js + vanilla ES. No build step. No npm install.",
+    "MUST INCLUDE:",
+    "  • Sticky top nav (logo + Menu/About/Reservations/Visit links).",
+    "  • Parallax hero (full-bleed food photo translates on scroll). Centered restaurant name in display serif. Reserve CTA.",
+    "  • Story section: 2 paragraphs about the place + chef portrait on the right.",
+    "  • Tabbed menu with 4 tabs (Brunch / Lunch / Dinner / Drinks). Each tab shows a grid of food cards (image + name + description + price).",
+    "  • Photo strip: 8-image masonry grid of food and atmosphere shots.",
+    "  • Hours table + map placeholder (gradient block w/ pin icon) side-by-side.",
+    "  • Reservation form (date / time / party size / name / email). Simulated submit with toast.",
+    "  • Footer with address, phone, social links.",
+    "LAYOUT: cream #faf6ef background, espresso #2a1f17 text, terracotta #c46a4f accent. Playfair Display for headings, Inter for body. CSS custom properties --bg, --text, --accent control the palette.",
+    "ANIMATIONS PRESENT: parallax hero (rAF-throttled scrollY*0.4), .reveal scroll-fade, Alpine x-show menu tab transitions, .zoom-card hover on food cards.",
+    "DO NOT REMOVE: parallax rAF throttle, prefers-reduced-motion guard.",
+    "SAFE TO CUSTOMIZE: all copy, restaurant name, menu items + prices, hours, address, palette CSS variables, image URLs (whitelist only).",
+    "IMAGE SLOTS (data-img-slot): hero, chef-portrait, menu-item, gallery.",
+    "TYPOGRAPHY: Playfair Display (display) + Inter (body) loaded via fonts.googleapis.com.",
+])
+
+_RULES_PHOTOGRAPHY: str = "\n".join([
+    "PURPOSE: An image-led photographer portfolio. Minimal chrome, full-bleed gallery, lightbox for image details.",
+    "TECH: Static HTML + Tailwind CDN + Alpine.js + vanilla ES. No build step. No npm install.",
+    "MUST INCLUDE:",
+    "  • Floating top nav (photographer name + Work / Series / About / Contact).",
+    "  • Full-screen hero image with photographer name + tagline overlaid bottom-left. Pulsing scroll-down indicator.",
+    "  • 3 featured series, each with a 3-image collage + title + 1-paragraph description.",
+    "  • Masonry grid: 12–15 images, varied aspect ratios. Click → lightbox.",
+    "  • Lightbox overlay: backdrop click closes, Escape closes, Arrow keys navigate.",
+    "  • About section: portrait photo + 2-paragraph bio + selected publications/clients list.",
+    "  • Minimal contact: email + Instagram link.",
+    "  • Footer.",
+    "LAYOUT: pure black #000 background, white #fff text, no accent color. Inter for everything, wide letter-spacing on display text.",
+    "ANIMATIONS PRESENT: .reveal scroll-fade, hero scroll-down pulse keyframe, .zoom-card hover on grid items, Alpine lightbox open/close transition.",
+    "DO NOT REMOVE: the lightbox component, the prefers-reduced-motion guard, the keyboard navigation event listener.",
+    "SAFE TO CUSTOMIZE: all copy, photographer name, image URLs (whitelist only), series count and titles, gallery images.",
+    "IMAGE SLOTS (data-img-slot): hero, series, gallery, portrait.",
+    "TYPOGRAPHY: Inter loaded via fonts.googleapis.com.",
+])
+
+_RULES_EVENT: str = "\n".join([
+    "PURPOSE: A bold, modern conference or festival landing page. Drives ticket sales and showcases speakers + agenda.",
+    "TECH: Static HTML + Tailwind CDN + Alpine.js + vanilla ES. No build step. No npm install.",
+    "MUST INCLUDE:",
+    "  • Sticky top nav (logo + Speakers / Schedule / Tickets / Venue links).",
+    "  • Hero with bold event name + dates + city. Live countdown to event date (days/hours/mins/secs). Buy Tickets CTA.",
+    "    When countdown elapses, displays 'Event in progress' instead of 00:00:00:00.",
+    "  • 3 stat cards (Talks / Speakers / Attendees) with count-up numbers.",
+    "  • Speaker grid: 12 cards each with photo, name, title, company. Hover reveals brief bio.",
+    "  • Schedule with Day 1 / Day 2 tabs. Each tab is a vertical timeline of sessions.",
+    "  • Tiered sponsor logo grid (Platinum / Gold / Silver).",
+    "  • Venue: address + map placeholder + 2-3 venue photos.",
+    "  • 3 ticket-tier cards (Early Bird / Regular / VIP) with pricing + perks.",
+    "  • FAQ accordion (Alpine x-show).",
+    "  • Footer.",
+    "LAYOUT: deep navy #0a1230 background, neon cyan #22d3ee accent, off-white text. Space Grotesk for everything.",
+    "ANIMATIONS PRESENT: live countdown (1Hz setInterval), count-up stats, speaker hover bio reveal (Alpine x-transition), schedule tab transitions, .reveal scroll-fade, sponsor strip subtle scroll.",
+    "DO NOT REMOVE: the countdown setInterval guard for prefers-reduced-motion (set target value once and skip ticking), the IntersectionObserver, the prefers-reduced-motion guard.",
+    "SAFE TO CUSTOMIZE: event name, dates, city, speaker list, schedule sessions, sponsor logos, ticket tiers, FAQ items, palette CSS variables, image URLs (whitelist only).",
+    "IMAGE SLOTS (data-img-slot): hero, speaker (avatar), venue, sponsor.",
+    "TYPOGRAPHY: Space Grotesk loaded via fonts.googleapis.com.",
+])
+
+_RULES_REAL_ESTATE: str = "\n".join([
+    "PURPOSE: An editorial property listing page. Showcases a single property with image gallery, stats, and agent contact.",
+    "TECH: Static HTML + Tailwind CDN + Alpine.js + vanilla ES. No build step. No npm install.",
+    "MUST INCLUDE:",
+    "  • Top nav (agent name + Listings / About / Contact).",
+    "  • Hero: property image carousel (3–5 images, auto-advance every 5s + manual prev/next + dot indicators). Address overlay + price tag.",
+    "  • Animated stats strip: beds / baths / sqft / lot size, all with count-up animation.",
+    "  • Description: 2 paragraphs + amenities checklist (8–12 items grouped by category).",
+    "  • 9-image photo gallery with masonry layout. Click → lightbox (shared component with photography template).",
+    "  • Map placeholder + neighborhood blurb (2 paragraphs about the area).",
+    "  • 'More from agent' row: 3 smaller listing cards.",
+    "  • Agent profile: agent photo, bio, phone, email, schedule-a-viewing form (date/time/name/email/phone). Simulated submit.",
+    "  • Footer.",
+    "LAYOUT: cream #faf7f2 background, slate #1f2937 text, warm gold #b08a3e accent. Cormorant Garamond for headings, Inter for body. CSS custom properties control the palette.",
+    "ANIMATIONS PRESENT: hero carousel (Alpine x-data with timer), count-up stats, gallery lightbox, .reveal scroll-fade, parallax hero (rAF-throttled).",
+    "DO NOT REMOVE: the lightbox component, the carousel timer cleanup, the prefers-reduced-motion guard.",
+    "SAFE TO CUSTOMIZE: property address, price, stats, description, amenities, photo URLs (whitelist only), agent name + bio + photo, neighborhood blurb, palette CSS variables.",
+    "IMAGE SLOTS (data-img-slot): hero, gallery, agent-portrait, neighborhood.",
+    "TYPOGRAPHY: Cormorant Garamond (display) + Inter (body) loaded via fonts.googleapis.com.",
+])
+
 
 # Storage instructions appended after the template rules block. Mirrors the
 # previous client-side STORAGE_INSTRUCTIONS dict.
@@ -460,6 +566,56 @@ STORAGE_INSTRUCTIONS: dict[str, str] = {
 # Hand-crafted SVG mockups shown in the templates gallery. Each one is a
 # stylized depiction of the template's layout — header bars, content blocks,
 # accent-colored interactive elements. ViewBox 0 0 320 180 (16:9-ish).
+
+_SVG_AGENCY = """<svg viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+  <rect width="320" height="200" fill="#0a0a0b"/>
+  <text x="20" y="60" fill="#ffffff" font-family="ui-sans-serif" font-size="22" font-weight="700">Studio</text>
+  <text x="20" y="86" fill="#c1ff00" font-family="ui-sans-serif" font-size="14">→ work · brand · web</text>
+  <rect x="20" y="110" width="130" height="60" fill="#1c1c1e" rx="4"/>
+  <rect x="160" y="110" width="130" height="60" fill="#1c1c1e" rx="4"/>
+</svg>"""
+
+_SVG_RESTAURANT = """<svg viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+  <rect width="320" height="200" fill="#faf6ef"/>
+  <rect x="0" y="0" width="320" height="120" fill="#c46a4f" opacity="0.18"/>
+  <text x="160" y="68" fill="#2a1f17" font-family="Georgia,serif" font-size="22" font-weight="700" text-anchor="middle">La Maison</text>
+  <text x="160" y="92" fill="#2a1f17" font-family="ui-sans-serif" font-size="11" text-anchor="middle">— since 2014 —</text>
+  <rect x="20" y="140" width="80" height="40" fill="#ffffff" stroke="#e8dccc" rx="3"/>
+  <rect x="120" y="140" width="80" height="40" fill="#ffffff" stroke="#e8dccc" rx="3"/>
+  <rect x="220" y="140" width="80" height="40" fill="#ffffff" stroke="#e8dccc" rx="3"/>
+</svg>"""
+
+_SVG_PHOTOGRAPHY = """<svg viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+  <rect width="320" height="200" fill="#000000"/>
+  <rect x="20" y="20" width="84" height="78" fill="#1a1a1a"/>
+  <rect x="118" y="20" width="84" height="58" fill="#1a1a1a"/>
+  <rect x="216" y="20" width="84" height="98" fill="#1a1a1a"/>
+  <rect x="20" y="112" width="84" height="68" fill="#1a1a1a"/>
+  <rect x="118" y="92" width="84" height="88" fill="#1a1a1a"/>
+  <rect x="216" y="132" width="84" height="48" fill="#1a1a1a"/>
+</svg>"""
+
+_SVG_EVENT = """<svg viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+  <rect width="320" height="200" fill="#0a1230"/>
+  <text x="20" y="60" fill="#ffffff" font-family="ui-sans-serif" font-size="24" font-weight="700">DEVCON</text>
+  <text x="20" y="84" fill="#22d3ee" font-family="ui-sans-serif" font-size="13">Sept 12—14 · Berlin</text>
+  <rect x="20" y="110" width="56" height="48" fill="#1a2750" rx="3"/>
+  <text x="48" y="140" fill="#22d3ee" font-family="ui-sans-serif" font-size="20" font-weight="700" text-anchor="middle">42</text>
+  <rect x="86" y="110" width="56" height="48" fill="#1a2750" rx="3"/>
+  <rect x="152" y="110" width="56" height="48" fill="#1a2750" rx="3"/>
+  <rect x="218" y="110" width="56" height="48" fill="#1a2750" rx="3"/>
+</svg>"""
+
+_SVG_REAL_ESTATE = """<svg viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+  <rect width="320" height="200" fill="#faf7f2"/>
+  <rect x="0" y="0" width="320" height="120" fill="#1f2937" opacity="0.08"/>
+  <rect x="20" y="20" width="200" height="100" fill="#e5d9bd" rx="3"/>
+  <text x="240" y="48" fill="#1f2937" font-family="Georgia,serif" font-size="14" font-weight="700">$1.2M</text>
+  <text x="240" y="68" fill="#b08a3e" font-family="ui-sans-serif" font-size="10">42 Maple St</text>
+  <text x="20" y="150" fill="#1f2937" font-family="ui-sans-serif" font-size="11">3 BD · 2 BA · 1,840 sqft</text>
+  <rect x="20" y="170" width="280" height="14" fill="#e5d9bd" rx="2"/>
+</svg>"""
+
 _SVG_LANDING = """<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 180" preserveAspectRatio="xMidYMid slice"><defs><linearGradient id="lbg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#1e1b4b"/><stop offset="1" stop-color="#0a0a0b"/></linearGradient></defs><rect width="320" height="180" fill="url(#lbg)"/><rect x="0" y="0" width="320" height="14" fill="#000" opacity="0.4"/><rect x="14" y="5" width="34" height="4" rx="1" fill="#a78bfa"/><circle cx="248" cy="7" r="1.5" fill="#fff" opacity="0.4"/><circle cx="258" cy="7" r="1.5" fill="#fff" opacity="0.4"/><circle cx="268" cy="7" r="1.5" fill="#fff" opacity="0.4"/><rect x="278" y="3" width="28" height="8" rx="2" fill="#a78bfa"/><rect x="14" y="38" width="170" height="9" rx="2" fill="#fff" opacity="0.85"/><rect x="14" y="52" width="120" height="6" rx="1" fill="#fff" opacity="0.55"/><rect x="14" y="66" width="140" height="4" rx="1" fill="#fff" opacity="0.3"/><rect x="14" y="84" width="50" height="14" rx="3" fill="#a78bfa"/><rect x="70" y="84" width="50" height="14" rx="3" fill="none" stroke="#a78bfa" stroke-width="1"/><rect x="208" y="32" width="98" height="64" rx="6" fill="#a78bfa" opacity="0.18"/><rect x="222" y="46" width="56" height="3" rx="1" fill="#a78bfa" opacity="0.7"/><rect x="222" y="55" width="40" height="3" rx="1" fill="#a78bfa" opacity="0.5"/><rect x="222" y="68" width="56" height="14" rx="2" fill="#a78bfa" opacity="0.4"/><rect x="14" y="118" width="92" height="46" rx="4" fill="#fff" opacity="0.06"/><rect x="114" y="118" width="92" height="46" rx="4" fill="#fff" opacity="0.06"/><rect x="214" y="118" width="92" height="46" rx="4" fill="#fff" opacity="0.06"/><circle cx="26" cy="130" r="4" fill="#a78bfa"/><rect x="36" y="128" width="40" height="3" rx="1" fill="#fff" opacity="0.7"/><rect x="20" y="142" width="78" height="2" rx="1" fill="#fff" opacity="0.3"/><rect x="20" y="148" width="60" height="2" rx="1" fill="#fff" opacity="0.3"/><circle cx="126" cy="130" r="4" fill="#a78bfa"/><rect x="136" y="128" width="40" height="3" rx="1" fill="#fff" opacity="0.7"/><rect x="120" y="142" width="78" height="2" rx="1" fill="#fff" opacity="0.3"/><rect x="120" y="148" width="60" height="2" rx="1" fill="#fff" opacity="0.3"/><circle cx="226" cy="130" r="4" fill="#a78bfa"/><rect x="236" y="128" width="40" height="3" rx="1" fill="#fff" opacity="0.7"/><rect x="220" y="142" width="78" height="2" rx="1" fill="#fff" opacity="0.3"/><rect x="220" y="148" width="60" height="2" rx="1" fill="#fff" opacity="0.3"/></svg>"""
 
 _SVG_PORTFOLIO = """<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 180" preserveAspectRatio="xMidYMid slice"><defs><linearGradient id="pbg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#4c1d4a"/><stop offset="1" stop-color="#0a0a0b"/></linearGradient></defs><rect width="320" height="180" fill="url(#pbg)"/><rect x="0" y="0" width="320" height="14" fill="#000" opacity="0.4"/><circle cx="22" cy="7" r="3.5" fill="#ec4899"/><rect x="248" y="5" width="20" height="4" rx="1" fill="#fff" opacity="0.4"/><rect x="272" y="5" width="20" height="4" rx="1" fill="#fff" opacity="0.4"/><rect x="296" y="5" width="14" height="4" rx="1" fill="#fff" opacity="0.4"/><rect x="14" y="32" width="200" height="11" rx="2" fill="#fff" opacity="0.9"/><rect x="14" y="48" width="120" height="6" rx="1" fill="#ec4899" opacity="0.8"/><rect x="14" y="62" width="180" height="3" rx="1" fill="#fff" opacity="0.4"/><rect x="14" y="68" width="160" height="3" rx="1" fill="#fff" opacity="0.4"/><circle cx="20" cy="84" r="3" fill="#ec4899"/><circle cx="32" cy="84" r="3" fill="#ec4899" opacity="0.7"/><circle cx="44" cy="84" r="3" fill="#ec4899" opacity="0.4"/><rect x="14" y="100" width="92" height="60" rx="5" fill="#ec4899" opacity="0.18"/><rect x="14" y="100" width="92" height="44" rx="5" fill="#ec4899" opacity="0.32"/><rect x="20" y="148" width="50" height="3" rx="1" fill="#fff" opacity="0.85"/><rect x="20" y="154" width="36" height="2" rx="1" fill="#fff" opacity="0.4"/><rect x="114" y="100" width="92" height="60" rx="5" fill="#ec4899" opacity="0.16"/><rect x="114" y="100" width="92" height="44" rx="5" fill="#fff" opacity="0.18"/><rect x="120" y="148" width="50" height="3" rx="1" fill="#fff" opacity="0.85"/><rect x="120" y="154" width="42" height="2" rx="1" fill="#fff" opacity="0.4"/><rect x="214" y="100" width="92" height="60" rx="5" fill="#ec4899" opacity="0.18"/><rect x="214" y="100" width="92" height="44" rx="5" fill="#ec4899" opacity="0.42"/><rect x="220" y="148" width="50" height="3" rx="1" fill="#fff" opacity="0.85"/><rect x="220" y="154" width="38" height="2" rx="1" fill="#fff" opacity="0.4"/></svg>"""
@@ -665,6 +821,86 @@ TEMPLATES: list[Template] = [
         placeholder="e.g. Microblog for a small writers' community. 280-char posts, optional image URL, likes, threaded comments, follow other handles. Single 600px column.",
         rules=_RULES_SOCIAL_FEED,
         storage="supabase",
+    ),
+    Template(
+        key="agency",
+        label="Agency",
+        emoji="🪐",
+        description="bold studio site",
+        placeholder="e.g. Studio site for a 6-person brand agency called 'Halftone'. 6 case studies, services for brand/web/motion, 2 testimonials, dark + lime-electric palette, animated hero.",
+        rules=_RULES_AGENCY,
+        storage="none",
+        role_tag="Studio site",
+        feature_bullets=(
+            "Bold scroll-driven hero with marquee work strip",
+            "Case-study grid with hover image reveals",
+            "Animated client logo carousel + sticky section labels",
+        ),
+        svg_mockup=_SVG_AGENCY,
+    ),
+    Template(
+        key="restaurant",
+        label="Restaurant",
+        emoji="🍽️",
+        description="restaurant or cafe site",
+        placeholder="e.g. Italian restaurant called 'La Maison'. Menu with 12 items across Brunch/Lunch/Dinner/Drinks. Hours 11am-10pm Tue-Sun. Warm cream + terracotta palette. Reservation form.",
+        rules=_RULES_RESTAURANT,
+        storage="none",
+        role_tag="Restaurant / cafe",
+        feature_bullets=(
+            "Parallax food-photography hero",
+            "Tabbed menu with image cards + prices",
+            "Hours, map placeholder, and reservation form",
+        ),
+        svg_mockup=_SVG_RESTAURANT,
+    ),
+    Template(
+        key="photography",
+        label="Photography",
+        emoji="📸",
+        description="photographer portfolio",
+        placeholder="e.g. Portfolio for travel photographer Mara Lin. 3 featured series (Iceland, Tokyo Streets, Coastal Light), 15-image masonry grid, About + selected clients (Conde Nast, NYT). Pure black + white palette.",
+        rules=_RULES_PHOTOGRAPHY,
+        storage="none",
+        role_tag="Photographer site",
+        feature_bullets=(
+            "Full-bleed image gallery with masonry layout",
+            "Lightbox overlay with keyboard navigation",
+            "Scroll-triggered fades, minimal chrome",
+        ),
+        svg_mockup=_SVG_PHOTOGRAPHY,
+    ),
+    Template(
+        key="event",
+        label="Event",
+        emoji="🎤",
+        description="conference or festival",
+        placeholder="e.g. 2-day developer conference 'DevCon Berlin', Sept 12-14. 12 speakers, 2-day schedule, 3 ticket tiers (Early Bird $299 / Regular $449 / VIP $899). Navy + neon cyan palette.",
+        rules=_RULES_EVENT,
+        storage="none",
+        role_tag="Conference / festival",
+        feature_bullets=(
+            "Live countdown to event date",
+            "Speaker grid with photos + hover bio",
+            "Agenda timeline, sponsor tiers, and FAQ accordion",
+        ),
+        svg_mockup=_SVG_EVENT,
+    ),
+    Template(
+        key="real-estate",
+        label="Real estate",
+        emoji="🏡",
+        description="property listing",
+        placeholder="e.g. Listing for a 3-bed Victorian at 42 Maple St, $1.2M. Carousel with 9 photos, beds/baths/sqft stats, neighborhood blurb. Agent: Sarah Mendez. Cream + warm gold palette.",
+        rules=_RULES_REAL_ESTATE,
+        storage="none",
+        role_tag="Property listing",
+        feature_bullets=(
+            "Property image carousel with auto-advance + lightbox",
+            "Animated stat counters (beds, baths, sqft, price)",
+            "Map placeholder, agent profile, and viewing-request form",
+        ),
+        svg_mockup=_SVG_REAL_ESTATE,
     ),
     Template(
         key="custom",

@@ -17,6 +17,8 @@ EXPECTED_KEYS = {
     "ecommerce", "booking", "chat", "auth", "blog", "blank",
     "invoice", "project-tracker", "ai-chatbot", "expense-tracker",
     "form-builder", "social-feed", "custom",
+    # New design-forward templates (2026-05-08):
+    "agency", "restaurant", "photography", "event", "real-estate",
 }
 
 # The synthetic 'custom' key is the escape hatch — it intentionally has no
@@ -40,8 +42,8 @@ def test_rules_exempt_set_is_minimal():
     )
 
 
-def test_19_templates_present():
-    assert len(TEMPLATES) == 19
+def test_24_templates_present():
+    assert len(TEMPLATES) == 24
     assert {t.key for t in TEMPLATES} == EXPECTED_KEYS
 
 
@@ -111,8 +113,11 @@ async def test_get_endpoint_excludes_rules_field():
         r = await c.get("/api/templates", headers=ADMIN_HEADERS)
     assert r.status_code == 200
     items = r.json()
-    assert len(items) == 19
-    expected_fields = {"key", "label", "emoji", "description", "placeholder"}
+    assert len(items) == 24
+    expected_fields = {
+        "key", "label", "emoji", "description", "placeholder",
+        "storage", "role_tag", "feature_bullets", "has_app", "svg_mockup",
+    }
     for item in items:
         assert set(item.keys()) == expected_fields, (
             f"unexpected fields on {item.get('key')}: {set(item.keys())}"
