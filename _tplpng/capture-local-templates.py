@@ -23,17 +23,51 @@ from pathlib import Path
 
 from playwright.sync_api import sync_playwright
 
-TEMPLATES = ["agency", "restaurant", "photography", "event", "real-estate"]
+TEMPLATES = [
+    "agency", "restaurant", "photography", "event", "real-estate",
+    # NEW (2026-05-11):
+    "flight-booking", "food-delivery", "job-board", "movie-tickets", "recipe-site",
+]
 
 # Per-template demo name to substitute into <%= APP_NAME %>. Picked to
 # match each template's tone — the gallery viewer should see a finished-
 # looking brand, not a placeholder token.
 DEMO_NAMES = {
-    "agency":      "Halftone",
-    "restaurant":  "La Maison",
-    "photography": "Mara Lin",
-    "event":       "DevCon Berlin",
-    "real-estate": "42 Maple Street",
+    "agency":         "Halftone",
+    "restaurant":     "La Maison",
+    "photography":    "Mara Lin",
+    "event":          "DevCon Berlin",
+    "real-estate":    "42 Maple Street",
+    "flight-booking": "Skylane",
+    "food-delivery":  "Roost",
+    "job-board":      "Workpath",
+    "movie-tickets":  "Lumen Cinemas",
+    "recipe-site":    "Salt & Pan",
+}
+
+# Per-template driver step before screenshot. Prefer Alpine state mutation
+# over click sequences (more stable across markup changes).
+DRIVERS = {
+    "flight-booking": """() => {
+        const s = document.querySelector('[x-data]')._x_dataStack[0];
+        s.runSearch();
+    }""",
+    "food-delivery": """() => {
+        const s = document.querySelector('[x-data]')._x_dataStack[0];
+        s.openMenu(s.restaurants[0].id);
+    }""",
+    "job-board": None,  # list view is already photogenic
+    "movie-tickets": """() => {
+        const s = document.querySelector('[x-data]')._x_dataStack[0];
+        s.openFilm(s.films[0].id);
+        s.pickShowtime(s.showtimes.find(x => x.filmId === s.films[0].id).id);
+        s.selectedSeats = ['3-5', '3-6'];
+        s.displayedTotal = 28;
+    }""",
+    "recipe-site": """() => {
+        const s = document.querySelector('[x-data]')._x_dataStack[0];
+        s.openRecipe(s.recipes[0].id);
+    }""",
 }
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -118,6 +152,14 @@ def main():
                 except Exception as e:
                     print(f"  WARN: {e}")
                 page.wait_for_timeout(2_000)  # Alpine + Tailwind + fonts settle
+                # Drive the template to its most photogenic view.
+                driver = DRIVERS.get(key)
+                if driver:
+                    try:
+                        page.evaluate(driver)
+                        page.wait_for_timeout(2_000)  # let simulateNetwork + transitions settle
+                    except Exception as e:
+                        print(f"  warn: driver step failed for {key}: {e}")
                 out = OUT_DIR / f"new-{key}.png"
                 page.screenshot(path=str(out), full_page=False)
                 size = out.stat().st_size
