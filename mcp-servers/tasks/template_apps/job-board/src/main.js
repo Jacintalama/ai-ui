@@ -81,11 +81,11 @@ window.appState = () => ({
 
   async submitApplication() {
     if (!this.application.name || !this.application.email || !this.application.cover) return;
-    this.setView("submitted");
     this.isLoading = true;
     await simulateNetwork();
     this.isLoading = false;
     this.trackingId = `APP-${Math.floor(Math.random() * 90000 + 10000)}`;
+    this.setView("submitted");
     this.application = { name: "", email: "", resume: "", cover: "" };
   },
 
