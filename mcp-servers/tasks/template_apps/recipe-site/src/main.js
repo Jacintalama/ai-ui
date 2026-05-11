@@ -30,7 +30,11 @@ function formatQuantity(value) {
 }
 
 // ── App root ────────────────────────────────────────────────────────────────
-window.appState = () => ({
+// Register via alpine:init to guarantee the function exists before Alpine
+// walks the DOM — ES modules are always deferred, which can race with Alpine's
+// own defer'd initialisation on slow/CDN loads.
+function _buildAppState() {
+  return {
   ...createRouter({ initial: "catalog", views: ["catalog", "recipe", "cook-mode", "completed"] }),
   ...createPersistence({ namespace: "recipe-site", keys: ["favorites", "cookingHistory"] }),
 
@@ -199,4 +203,14 @@ window.appState = () => ({
     this.toastMsg = msg;
     setTimeout(() => { this.toastMsg = ""; }, 2000);
   },
+  };
+}
+
+// Make available on window immediately (for environments where the module
+// loads synchronously before Alpine), AND via alpine:init for the deferred case.
+window.appState = _buildAppState;
+document.addEventListener("alpine:init", () => {
+  // alpine:init fires before Alpine walks the DOM, so re-registering here
+  // ensures it's available regardless of module vs defer load order.
+  window.appState = _buildAppState;
 });
