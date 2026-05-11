@@ -9,10 +9,6 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles/main.css" />
-  <!-- Inline bundle: all logic runs synchronously before Alpine's defer fires,
-       guaranteeing window.appState is defined when Alpine walks the DOM.
-       The modular src/ files are preserved for bundler-based workflows. -->
-  <script src="src/bundle.js"></script>
   <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
 </head>
 <body x-data="appState()" x-init="init()" class="bg-[var(--bg)] text-[var(--text)] font-sans min-h-screen">
@@ -192,7 +188,7 @@
 
         <!-- Title + favorite -->
         <div class="flex items-start justify-between gap-4 mb-3">
-          <h1 class="display text-3xl sm:text-4xl font-semibold text-[var(--text)] leading-tight" x-text="selectedRecipe.title"></h1>
+          <h2 class="display text-3xl sm:text-4xl font-semibold text-[var(--text)] leading-tight" x-text="selectedRecipe.title"></h2>
           <button
             @click="toggleFavorite(selectedRecipe.id)"
             :aria-label="isFavorite(selectedRecipe.id) ? 'Remove from favorites' : 'Save to favorites'"
@@ -356,7 +352,7 @@
       </svg>
     </div>
 
-    <h1 class="display text-3xl sm:text-4xl font-semibold text-[var(--text)] mb-2">Recipe complete!</h1>
+    <h2 class="display text-3xl sm:text-4xl font-semibold text-[var(--text)] mb-2">Recipe complete!</h2>
     <p class="text-[var(--text-muted)] mb-2" x-text="selectedRecipe?.title ?? ''"></p>
     <p class="text-[var(--text-muted)] text-sm mb-8">Enjoy your meal. Well done!</p>
 
@@ -407,5 +403,6 @@
     x-text="toastMsg"
   ></div>
 
+  <script type="module" src="src/main.js"></script>
 </body>
 </html>

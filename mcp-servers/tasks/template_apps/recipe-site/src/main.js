@@ -1,7 +1,6 @@
 // Salt & Pan — recipe site main state.
 import { createRouter }      from "./lib/router.js";
 import { createPersistence } from "./lib/persistence.js";
-import { simulateNetwork }   from "./lib/skeleton.js";
 import { recipes }           from "./data.js";
 
 // ── Fraction glyphs ────────────────────────────────────────────────────────
