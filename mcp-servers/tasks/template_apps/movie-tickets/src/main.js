@@ -9,7 +9,7 @@ const ROWS = 10;
 const COLS = 14;
 const AISLES = new Set([4, 9]);
 
-window.appState = () => ({
+function _buildAppState() { return {
   ...createRouter({ initial: "now-showing", views: ["now-showing", "film", "showtime", "seats", "checkout", "tickets"] }),
   ...createPersistence({ namespace: "movie-tickets", keys: ["bookedShowings"] }),
 
@@ -179,4 +179,9 @@ window.appState = () => ({
   },
 
   toast(msg) { this.toastMsg = msg; setTimeout(() => { this.toastMsg = ""; }, 2000); },
-});
+}; }
+
+// Expose on window immediately AND via alpine:init to handle both
+// defer'd script and ES module load-order races.
+window.appState = _buildAppState;
+document.addEventListener("alpine:init", () => { window.appState = _buildAppState; });

@@ -4,7 +4,7 @@ import { createPersistence } from "./lib/persistence.js";
 import { simulateNetwork }   from "./lib/skeleton.js";
 import { flights, cities, airlines } from "./data.js";
 
-window.appState = () => ({
+function _buildAppState() { return {
   ...createRouter({ initial: "search", views: ["search", "results", "detail", "review"] }),
   ...createPersistence({ namespace: "flight-booking", keys: ["savedTrips"] }),
 
@@ -93,4 +93,9 @@ window.appState = () => ({
   formatDuration(min) {
     return `${Math.floor(min / 60)}h ${min % 60}m`;
   },
-});
+}; }
+
+// Expose on window immediately AND via alpine:init to handle both
+// defer'd script and ES module load-order races.
+window.appState = _buildAppState;
+document.addEventListener("alpine:init", () => { window.appState = _buildAppState; });

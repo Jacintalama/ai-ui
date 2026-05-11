@@ -3,7 +3,7 @@ import { createPersistence } from "./lib/persistence.js";
 import { simulateNetwork }   from "./lib/skeleton.js";
 import { restaurants, cuisines } from "./data.js";
 
-window.appState = () => ({
+function _buildAppState() { return {
   ...createRouter({ initial: "restaurants", views: ["restaurants", "menu", "cart", "checkout", "confirmation"] }),
   ...createPersistence({ namespace: "food-delivery", keys: ["cart"] }),
 
@@ -140,4 +140,9 @@ window.appState = () => ({
     this.toastMsg = msg;
     setTimeout(() => { this.toastMsg = ""; }, 2000);
   },
-});
+}; }
+
+// Expose on window immediately AND via alpine:init to handle both
+// defer'd script and ES module load-order races.
+window.appState = _buildAppState;
+document.addEventListener("alpine:init", () => { window.appState = _buildAppState; });
