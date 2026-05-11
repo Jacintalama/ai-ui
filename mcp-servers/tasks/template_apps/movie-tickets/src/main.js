@@ -16,6 +16,7 @@ window.appState = () => ({
   films,
   theaters,
   showtimes,
+  SEAT_PRICE,
   genres,
 
   filters: { genre: "all", theaterId: "all" },
