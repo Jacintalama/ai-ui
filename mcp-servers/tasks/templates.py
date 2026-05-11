@@ -442,6 +442,101 @@ _RULES_SOCIAL_FEED = "\n".join([
     "WITHOUT SUPABASE: localStorage with mock data — agent should pre-seed 5 fake posts + 3 fake users so the UI is browsable, AND show a one-line yellow banner: 'Connect Supabase + enable Auth for real multi-user sharing — this is currently a demo with mock data.'",
 ])
 
+_RULES_FLIGHT_BOOKING: str = "\n".join([
+    "PURPOSE: A flight search and booking app. User searches for flights by route/date/passengers, filters results by price/stops/time, picks a flight, reviews, and saves to a trips list.",
+    "TECH: Static HTML + Tailwind CDN + Alpine.js + vanilla ES modules. Single-page state machine with views: search, results, detail, review. No build step. No npm install.",
+    "MUST INCLUDE:",
+    "  - Compact sticky app header (~56px, logo + brand name + profile chip stub, NOT a marketing hero).",
+    "  - Search view: origin (datalist autocomplete), destination, depart/return dates, passenger count, cabin class. Big 'Search flights' button.",
+    "  - Results view: filter sidebar (price range slider, stops radio, time-of-day pills, airlines multi-select, duration slider) + scrollable result list. Skeleton placeholders during 800-1400ms simulateNetwork().",
+    "  - Detail view: full flight info, baggage allowance, decorative seat-map SVG, 'Save trip' + 'Continue to review' buttons.",
+    "  - Review view: passenger names form, payment summary placeholder, 'Confirm' that toasts + resets to search.",
+    "  - Saved trips persist in localStorage under namespace 'flight-booking'.",
+    "LAYOUT: navy #0a1f3d primary, coral #ff6b5b accent, off-white background. Inter typography. CSS custom properties --bg, --primary, --accent.",
+    "ANIMATIONS PRESENT: x-transition.duration.200ms between view changes, animate-pulse skeleton placeholders, slider thumb micro-shadow, card hover lift (2px y).",
+    "DO NOT REMOVE: simulateNetwork() delay (gates skeleton), the prefers-reduced-motion guards, localStorage hydration in init().",
+    "SAFE TO CUSTOMIZE: all copy, flight data in src/data.js, palette CSS variables, brand name, airline list. Image URLs must stay on whitelist (images.unsplash.com).",
+    "IMAGE SLOTS (data-img-slot): hero (optional destination image in search view).",
+    "TYPOGRAPHY: Inter loaded via fonts.googleapis.com.",
+])
+
+_RULES_FOOD_DELIVERY: str = "\n".join([
+    "PURPOSE: A food delivery marketplace. User browses restaurants, opens a menu, adds items to a real cart, fake-checks-out.",
+    "TECH: Static HTML + Tailwind CDN + Alpine.js + vanilla ES modules. Single-page state machine with views: restaurants, menu, cart, checkout, confirmation. No build step.",
+    "MUST INCLUDE:",
+    "  - Compact sticky header with cart-count badge (live total).",
+    "  - Restaurants view: cuisine filter pills (Pizza/Sushi/Burger/Asian/Mexican/Vegan/Indian/Thai), min-rating slider, max-delivery-time slider, restaurant grid (image, name, cuisine, rating, ETA).",
+    "  - Menu view: restaurant hero banner, items grid (image, name, description, price, +/- quantity stepper that updates cart).",
+    "  - Cart view: line items grouped by restaurant, +/- stepper for each line, subtotal + $3.99 delivery fee + 8% tax + total, 'Place order' button.",
+    "  - Checkout view: delivery address form, payment placeholder (last-4 input — visual only).",
+    "  - Confirmation view: 'On its way' + fake ETA + decorative map placeholder.",
+    "  - Cart persists in localStorage under namespace 'food-delivery'.",
+    "LAYOUT: cream #fff8ec background, orange #ff8c42 accent, slate text. Inter for body, DM Sans for headings.",
+    "ANIMATIONS PRESENT: x-transition.duration.200ms between views, cart-count badge count-up animation, animate-pulse skeleton, +/- button micro-bounce on click, item-card hover lift.",
+    "DO NOT REMOVE: simulateNetwork() delay, prefers-reduced-motion guards, localStorage hydration in init(), the cart-state shape (changing it breaks reload-recovery).",
+    "SAFE TO CUSTOMIZE: restaurant + menu data in src/data.js, cuisine tags, palette CSS variables, brand name, photo URLs (whitelist only).",
+    "IMAGE SLOTS (data-img-slot): restaurant-hero, restaurant-thumb, menu-item.",
+    "TYPOGRAPHY: Inter + DM Sans loaded via fonts.googleapis.com.",
+])
+
+_RULES_JOB_BOARD: str = "\n".join([
+    "PURPOSE: A job search board. User searches and filters jobs, opens detail, bookmarks favorites, applies via a form.",
+    "TECH: Static HTML + Tailwind CDN + Alpine.js + vanilla ES modules. Single-page state machine with views: list, detail, apply, submitted. No build step.",
+    "MUST INCLUDE:",
+    "  - Compact sticky header with brand name + 'Saved (n)' counter.",
+    "  - List view: debounced search bar (250ms — matches title + company), remote-mode toggle, salary range slider ($60k-$300k), role-family multi-select pills (Engineering/Design/PM/Marketing/Data), seniority pills (junior/mid/senior/staff+).",
+    "  - Job list: cards with DiceBear-generated company logo, title, location, salary range, posted-date (relative format), bookmark toggle.",
+    "  - Detail view: full job description, company info card, 'Save' + 'Apply' buttons, similar-roles strip.",
+    "  - Apply form: name, email, resume 'upload' (displays filename only — no real upload), cover letter textarea, required-field validation.",
+    "  - Submitted view: 'Application sent' + fake tracking ID.",
+    "  - Saved jobs persist in localStorage under namespace 'job-board'.",
+    "LAYOUT: white background, blue #2563eb accent, slate text. Inter typography.",
+    "ANIMATIONS PRESENT: x-transition.duration.200ms between views, debounced search filter, bookmark icon outline-to-filled swap, list-card hover lift, 'Sent' confirmation slide-up.",
+    "DO NOT REMOVE: simulateNetwork() delay, prefers-reduced-motion guards, debounce timer cleanup, localStorage hydration.",
+    "SAFE TO CUSTOMIZE: jobs and companies in src/data.js, role families, palette CSS variables, brand name.",
+    "IMAGE SLOTS (data-img-slot): none — company logos are generated from DiceBear initials API.",
+    "TYPOGRAPHY: Inter loaded via fonts.googleapis.com.",
+])
+
+_RULES_MOVIE_TICKETS: str = "\n".join([
+    "PURPOSE: A cinema ticket booking app. User picks a film, chooses a showtime, selects seats from a live grid, fake-checks-out.",
+    "TECH: Static HTML + Tailwind CDN + Alpine.js + vanilla ES modules. Single-page state machine with views: now-showing, film, showtime, seats, checkout, tickets. No build step.",
+    "MUST INCLUDE:",
+    "  - Compact sticky header with brand name (cinema chain).",
+    "  - Now-showing grid: film posters (3:4 aspect), rating, genre tags, duration. Click → film view.",
+    "  - Film detail view: synopsis, trailer-thumb placeholder, theater dropdown, showtime grid (clickable times). Click → seats view.",
+    "  - Seats view: 10 rows × 14 seats per theater. Seat classes: available (gray), taken (~30% of seats, locked), selected (accent color), aisle (cols 5+10, non-clickable). Running total animates count-up as seats are added.",
+    "  - Max 8 seats per booking. 'Continue' button disables beyond 8 or when 0 selected.",
+    "  - Checkout view: ticket summary (seats + showtime + film), fake 'Pay' button.",
+    "  - Tickets view: QR-code SVG placeholder + confirmation, 'Save to history' button.",
+    "  - Booked showings persist in localStorage under namespace 'movie-tickets'.",
+    "LAYOUT: black #0a0a0a background, amber #f59e0b accent, white text. Inter typography.",
+    "ANIMATIONS PRESENT: x-transition.duration.200ms between views, seat-toggle micro-pop (scale 1 → 1.1 → 1), running total count-up, poster hover scale 1.02.",
+    "DO NOT REMOVE: the seat-grid Set/Map state shape, simulateNetwork() delay, prefers-reduced-motion guards, taken-seat exclusion in the click handler.",
+    "SAFE TO CUSTOMIZE: films, showtimes, theaters, palette CSS variables, brand name, poster URLs (whitelist only).",
+    "IMAGE SLOTS (data-img-slot): film-poster.",
+    "TYPOGRAPHY: Inter loaded via fonts.googleapis.com.",
+])
+
+_RULES_RECIPE_SITE: str = "\n".join([
+    "PURPOSE: A recipe site with a 'cook mode' interactive flow. User browses recipes, opens a recipe, scales servings live (which recalculates all ingredient quantities), starts cook mode, advances step-by-step with optional timers.",
+    "TECH: Static HTML + Tailwind CDN + Alpine.js + vanilla ES modules. Single-page state machine with views: catalog, recipe, cook-mode, completed. No build step.",
+    "MUST INCLUDE:",
+    "  - Compact sticky header with brand name + 'Favorites (n)' counter.",
+    "  - Catalog view: ingredient search (matches ingredient names across recipes), diet pills (vegan/vegetarian/gluten-free/dairy-free), time-to-cook bucket (<15min / <30min / <60min / any), difficulty.",
+    "  - Recipe grid: cards with hero image, name, time, difficulty, favorite toggle.",
+    "  - Recipe detail view: hero image, byline, intro paragraph, ingredient list with serving-size slider (default 2, range 1-8 — quantities scale linearly, fractions render as fractions: '½ cup' not '0.5 cup'), step preview, 'Start Cooking' button.",
+    "  - Cook-mode view: FULLSCREEN single-step view, 'Step n of N' indicator, large readable step text, optional inline 3:00 countdown timer (chime at 0), 'Next step' button, 'Exit' button. Attempt navigator.wakeLock.request('screen') on enter; gracefully no-op if unsupported.",
+    "  - Completed view: celebration message, rating prompt, save-to-favorites toggle.",
+    "  - Favorites + cookingHistory persist in localStorage under namespace 'recipe-site'.",
+    "LAYOUT: warm white #faf6f1 background, olive #556b2f accent, slate text. Fraunces display + Inter body.",
+    "ANIMATIONS PRESENT: x-transition.duration.200ms between views, ingredient-quantity count-up on serving change, hero-image fade-in.",
+    "DO NOT REMOVE: the fraction renderer (formatQuantity), the wakelock try/catch, prefers-reduced-motion guards, localStorage hydration.",
+    "SAFE TO CUSTOMIZE: recipes in src/data.js, diet tags, palette CSS variables, brand name, photo URLs (whitelist only).",
+    "IMAGE SLOTS (data-img-slot): recipe-hero, recipe-thumb.",
+    "TYPOGRAPHY: Fraunces (display) + Inter (body) loaded via fonts.googleapis.com.",
+])
+
 _RULES_AGENCY: str = "\n".join([
     "PURPOSE: A bold, image-led studio/agency website. Showcases the firm's work, capabilities, clients, and personality.",
     "TECH: Static HTML + Tailwind CDN + Alpine.js + vanilla ES. No build step. No npm install.",
@@ -614,6 +709,77 @@ _SVG_REAL_ESTATE = """<svg viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/s
   <text x="240" y="68" fill="#b08a3e" font-family="ui-sans-serif" font-size="10">42 Maple St</text>
   <text x="20" y="150" fill="#1f2937" font-family="ui-sans-serif" font-size="11">3 BD · 2 BA · 1,840 sqft</text>
   <rect x="20" y="170" width="280" height="14" fill="#e5d9bd" rx="2"/>
+</svg>"""
+
+_SVG_FLIGHT_BOOKING = """<svg viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+  <rect width="320" height="200" fill="#0a1f3d"/>
+  <text x="20" y="44" fill="#ffffff" font-family="ui-sans-serif" font-size="14" font-weight="600">Skylane</text>
+  <rect x="20" y="60" width="130" height="26" fill="#1a2f5c" rx="4"/>
+  <text x="32" y="78" fill="#ffffff" font-family="ui-sans-serif" font-size="11">JFK → LHR</text>
+  <rect x="160" y="60" width="130" height="26" fill="#ff6b5b" rx="4"/>
+  <text x="225" y="78" fill="#ffffff" font-family="ui-sans-serif" font-size="11" text-anchor="middle">Search</text>
+  <rect x="20" y="100" width="270" height="22" fill="#1a2f5c" rx="3"/>
+  <rect x="20" y="128" width="270" height="22" fill="#1a2f5c" rx="3"/>
+  <rect x="20" y="156" width="270" height="22" fill="#1a2f5c" rx="3"/>
+</svg>"""
+
+_SVG_FOOD_DELIVERY = """<svg viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+  <rect width="320" height="200" fill="#fff8ec"/>
+  <text x="20" y="36" fill="#1a1208" font-family="ui-sans-serif" font-size="14" font-weight="600">Roost</text>
+  <rect x="20" y="50" width="50" height="20" fill="#ff8c42" rx="10"/>
+  <text x="45" y="64" fill="#ffffff" font-family="ui-sans-serif" font-size="10" text-anchor="middle">Pizza</text>
+  <rect x="76" y="50" width="50" height="20" fill="#ffffff" stroke="#ff8c42" rx="10"/>
+  <text x="101" y="64" fill="#ff8c42" font-family="ui-sans-serif" font-size="10" text-anchor="middle">Sushi</text>
+  <rect x="20" y="84" width="130" height="60" fill="#ffe6c9" rx="4"/>
+  <rect x="160" y="84" width="130" height="60" fill="#ffe6c9" rx="4"/>
+  <rect x="20" y="156" width="270" height="28" fill="#ff8c42" rx="4"/>
+  <text x="155" y="174" fill="#ffffff" font-family="ui-sans-serif" font-size="11" font-weight="600" text-anchor="middle">Cart (3) · $42</text>
+</svg>"""
+
+_SVG_JOB_BOARD = """<svg viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+  <rect width="320" height="200" fill="#ffffff"/>
+  <text x="20" y="36" fill="#0f172a" font-family="ui-sans-serif" font-size="14" font-weight="600">Workpath</text>
+  <rect x="20" y="50" width="280" height="26" fill="#f1f5f9" stroke="#e2e8f0" rx="4"/>
+  <text x="32" y="68" fill="#64748b" font-family="ui-sans-serif" font-size="11">Search jobs…</text>
+  <rect x="20" y="86" width="60" height="20" fill="#2563eb" rx="10"/>
+  <text x="50" y="100" fill="#ffffff" font-family="ui-sans-serif" font-size="10" text-anchor="middle">Remote</text>
+  <rect x="20" y="116" width="280" height="22" fill="#f8fafc" rx="3"/>
+  <rect x="20" y="144" width="280" height="22" fill="#f8fafc" rx="3"/>
+  <rect x="20" y="172" width="280" height="22" fill="#f8fafc" rx="3"/>
+</svg>"""
+
+_SVG_MOVIE_TICKETS = """<svg viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+  <rect width="320" height="200" fill="#0a0a0a"/>
+  <text x="20" y="32" fill="#ffffff" font-family="ui-sans-serif" font-size="13" font-weight="600">Lumen Cinemas</text>
+  <text x="20" y="50" fill="#f59e0b" font-family="ui-sans-serif" font-size="11">Dune Pt 2 · 7:30pm</text>
+  <g transform="translate(20,68)">
+    <rect x="0" y="0" width="16" height="16" fill="#333333" rx="2"/>
+    <rect x="20" y="0" width="16" height="16" fill="#555555" rx="2"/>
+    <rect x="40" y="0" width="16" height="16" fill="#555555" rx="2"/>
+    <rect x="60" y="0" width="16" height="16" fill="#f59e0b" rx="2"/>
+    <rect x="80" y="0" width="16" height="16" fill="#f59e0b" rx="2"/>
+    <rect x="100" y="0" width="16" height="16" fill="#333333" rx="2"/>
+    <rect x="0" y="20" width="16" height="16" fill="#333333" rx="2"/>
+    <rect x="20" y="20" width="16" height="16" fill="#333333" rx="2"/>
+    <rect x="40" y="20" width="16" height="16" fill="#555555" rx="2"/>
+    <rect x="60" y="20" width="16" height="16" fill="#333333" rx="2"/>
+    <rect x="80" y="20" width="16" height="16" fill="#333333" rx="2"/>
+    <rect x="100" y="20" width="16" height="16" fill="#333333" rx="2"/>
+  </g>
+  <rect x="20" y="158" width="160" height="26" fill="#f59e0b" rx="4"/>
+  <text x="100" y="176" fill="#0a0a0a" font-family="ui-sans-serif" font-size="11" font-weight="600" text-anchor="middle">2 seats · $32</text>
+</svg>"""
+
+_SVG_RECIPE_SITE = """<svg viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+  <rect width="320" height="200" fill="#faf6f1"/>
+  <text x="20" y="36" fill="#1f2937" font-family="Georgia,serif" font-size="16" font-weight="700" font-style="italic">Salt &amp; Pan</text>
+  <rect x="20" y="52" width="280" height="80" fill="#e8e0d0" rx="4"/>
+  <text x="160" y="100" fill="#556b2f" font-family="Georgia,serif" font-size="14" text-anchor="middle">Lemon Garlic Pasta</text>
+  <text x="160" y="120" fill="#6b7280" font-family="ui-sans-serif" font-size="11" text-anchor="middle">25 min · easy</text>
+  <rect x="20" y="148" width="40" height="22" fill="#556b2f" rx="11"/>
+  <text x="40" y="163" fill="#ffffff" font-family="ui-sans-serif" font-size="10" text-anchor="middle">Vegan</text>
+  <rect x="68" y="148" width="60" height="22" fill="#ffffff" stroke="#556b2f" rx="11"/>
+  <text x="98" y="163" fill="#556b2f" font-family="ui-sans-serif" font-size="10" text-anchor="middle">30 min</text>
 </svg>"""
 
 _SVG_LANDING = """<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 180" preserveAspectRatio="xMidYMid slice"><defs><linearGradient id="lbg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#1e1b4b"/><stop offset="1" stop-color="#0a0a0b"/></linearGradient></defs><rect width="320" height="180" fill="url(#lbg)"/><rect x="0" y="0" width="320" height="14" fill="#000" opacity="0.4"/><rect x="14" y="5" width="34" height="4" rx="1" fill="#a78bfa"/><circle cx="248" cy="7" r="1.5" fill="#fff" opacity="0.4"/><circle cx="258" cy="7" r="1.5" fill="#fff" opacity="0.4"/><circle cx="268" cy="7" r="1.5" fill="#fff" opacity="0.4"/><rect x="278" y="3" width="28" height="8" rx="2" fill="#a78bfa"/><rect x="14" y="38" width="170" height="9" rx="2" fill="#fff" opacity="0.85"/><rect x="14" y="52" width="120" height="6" rx="1" fill="#fff" opacity="0.55"/><rect x="14" y="66" width="140" height="4" rx="1" fill="#fff" opacity="0.3"/><rect x="14" y="84" width="50" height="14" rx="3" fill="#a78bfa"/><rect x="70" y="84" width="50" height="14" rx="3" fill="none" stroke="#a78bfa" stroke-width="1"/><rect x="208" y="32" width="98" height="64" rx="6" fill="#a78bfa" opacity="0.18"/><rect x="222" y="46" width="56" height="3" rx="1" fill="#a78bfa" opacity="0.7"/><rect x="222" y="55" width="40" height="3" rx="1" fill="#a78bfa" opacity="0.5"/><rect x="222" y="68" width="56" height="14" rx="2" fill="#a78bfa" opacity="0.4"/><rect x="14" y="118" width="92" height="46" rx="4" fill="#fff" opacity="0.06"/><rect x="114" y="118" width="92" height="46" rx="4" fill="#fff" opacity="0.06"/><rect x="214" y="118" width="92" height="46" rx="4" fill="#fff" opacity="0.06"/><circle cx="26" cy="130" r="4" fill="#a78bfa"/><rect x="36" y="128" width="40" height="3" rx="1" fill="#fff" opacity="0.7"/><rect x="20" y="142" width="78" height="2" rx="1" fill="#fff" opacity="0.3"/><rect x="20" y="148" width="60" height="2" rx="1" fill="#fff" opacity="0.3"/><circle cx="126" cy="130" r="4" fill="#a78bfa"/><rect x="136" y="128" width="40" height="3" rx="1" fill="#fff" opacity="0.7"/><rect x="120" y="142" width="78" height="2" rx="1" fill="#fff" opacity="0.3"/><rect x="120" y="148" width="60" height="2" rx="1" fill="#fff" opacity="0.3"/><circle cx="226" cy="130" r="4" fill="#a78bfa"/><rect x="236" y="128" width="40" height="3" rx="1" fill="#fff" opacity="0.7"/><rect x="220" y="142" width="78" height="2" rx="1" fill="#fff" opacity="0.3"/><rect x="220" y="148" width="60" height="2" rx="1" fill="#fff" opacity="0.3"/></svg>"""
@@ -821,6 +987,86 @@ TEMPLATES: list[Template] = [
         placeholder="e.g. Microblog for a small writers' community. 280-char posts, optional image URL, likes, threaded comments, follow other handles. Single 600px column.",
         rules=_RULES_SOCIAL_FEED,
         storage="supabase",
+    ),
+    Template(
+        key="flight-booking",
+        label="Flight Booking",
+        emoji="✈️",
+        description="flight search + booking flow",
+        placeholder="e.g. Flight search app called 'Skylane'. Routes between 8 major cities (JFK, LHR, SFO, NRT, LAX, CDG, ATL, FCO). Filters by price, stops, time of day. Save trips. Navy + coral palette.",
+        rules=_RULES_FLIGHT_BOOKING,
+        storage="none",
+        role_tag="Search + booking",
+        feature_bullets=(
+            "Live filter sliders (price, stops, time of day)",
+            "Skeleton loaders gated on a real 800-1400ms fake-network delay",
+            "Saved trips persist across page reloads",
+        ),
+        svg_mockup=_SVG_FLIGHT_BOOKING,
+    ),
+    Template(
+        key="food-delivery",
+        label="Food Delivery",
+        emoji="🍔",
+        description="restaurant marketplace + cart",
+        placeholder="e.g. Food delivery marketplace called 'Roost'. 14 restaurants across 8 cuisines, 12 menu items each. Real cart with quantity stepper. Cream + orange palette.",
+        rules=_RULES_FOOD_DELIVERY,
+        storage="none",
+        role_tag="Marketplace + cart",
+        feature_bullets=(
+            "Cuisine filter pills, rating + delivery-time sliders",
+            "Real cart with quantity stepper — survives page reload",
+            "Multi-step checkout with confirmation view",
+        ),
+        svg_mockup=_SVG_FOOD_DELIVERY,
+    ),
+    Template(
+        key="job-board",
+        label="Job Board",
+        emoji="💼",
+        description="job search with filters + apply",
+        placeholder="e.g. Job board called 'Workpath'. 60 jobs across 12 companies, mixed role families. Debounced search. Remote/hybrid/onsite filter. Save jobs. Application form. White + blue palette.",
+        rules=_RULES_JOB_BOARD,
+        storage="none",
+        role_tag="Search + apply",
+        feature_bullets=(
+            "Debounced 250ms search bar with multi-filter chips",
+            "Bookmark toggle persists per-user",
+            "Application form with required-field validation",
+        ),
+        svg_mockup=_SVG_JOB_BOARD,
+    ),
+    Template(
+        key="movie-tickets",
+        label="Movie Tickets",
+        emoji="🎬",
+        description="cinema seat picker + checkout",
+        placeholder="e.g. Cinema chain 'Lumen Cinemas'. 12 films, 3 theaters, ~5 showtimes each. Interactive 10×14 seat grid. Black + amber palette.",
+        rules=_RULES_MOVIE_TICKETS,
+        storage="none",
+        role_tag="Seat picker + checkout",
+        feature_bullets=(
+            "Interactive 10×14 seat grid (available/taken/selected/aisle)",
+            "Running total count-up as seats are added",
+            "Multi-step booking with ticket history persisted",
+        ),
+        svg_mockup=_SVG_MOVIE_TICKETS,
+    ),
+    Template(
+        key="recipe-site",
+        label="Recipe Site",
+        emoji="🥘",
+        description="recipes + cook mode + serving scale",
+        placeholder="e.g. Recipe site 'Salt & Pan'. 30 recipes with diet tags. Live serving-size slider that rescales ingredients (½ cup, not 0.5 cup). Fullscreen cook mode with step timer. Warm white + olive palette.",
+        rules=_RULES_RECIPE_SITE,
+        storage="none",
+        role_tag="Browse + cook mode",
+        feature_bullets=(
+            "Serving-size slider rescales ingredient quantities live",
+            "Fullscreen cook mode with optional step timer",
+            "Wakelock attempt prevents screen sleep while cooking",
+        ),
+        svg_mockup=_SVG_RECIPE_SITE,
     ),
     Template(
         key="agency",
