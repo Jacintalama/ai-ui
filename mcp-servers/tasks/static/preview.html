@@ -6960,20 +6960,13 @@
       $prompt.value = "";
       return submitChat(text);
     }
-    // Build mode + question-shaped text: offer to send via Ask instead.
-    // Skip after the user has dismissed once this session.
-    if (_looksLikeQuestion(text) && !window._qHintDismissed) {
-      const useAsk = window.confirm(
-        "This looks like a question, not an edit request.\n\n" +
-        "Send it in 'Ask' mode to get an answer without trying to change anything?\n\n" +
-        "OK = use Ask mode (recommended)\nCancel = stay in Build mode"
-      );
-      if (useAsk) {
-        setMode("chat");
-        $prompt.value = "";
-        return submitChat(text);
-      }
-      window._qHintDismissed = true;
+    // Build mode + question-shaped text: silently route this single message
+    // through the Q&A endpoint so the user gets an answer instead of being
+    // trapped in NEEDS_INPUT. The composer mode stays on Build for the NEXT
+    // message — only this one is reinterpreted. No popup.
+    if (_looksLikeQuestion(text)) {
+      $prompt.value = "";
+      return submitChat(text);
     }
     return submitEnhance();
   }
