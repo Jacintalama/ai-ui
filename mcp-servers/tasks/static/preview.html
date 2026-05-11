@@ -2913,8 +2913,8 @@
                 <span class="sub">Make changes directly</span>
               </button>
               <button role="menuitem" data-mode="chat" type="button">
-                <span class="title">Plan</span>
-                <span class="sub">Discuss before building</span>
+                <span class="title">Ask</span>
+                <span class="sub">Ask questions, no changes made</span>
               </button>
               <div class="menu-foot">Toggle with <kbd>Alt</kbd><kbd>P</kbd></div>
             </div>
@@ -5987,9 +5987,9 @@
     $modeMenu.querySelectorAll("button[role='menuitem']").forEach((b) => {
       b.classList.toggle("active", b.dataset.mode === m);
     });
-    $modeLabel.textContent = m === "build" ? "Build" : "Plan";
+    $modeLabel.textContent = m === "build" ? "Build" : "Ask";
     $prompt.placeholder = m === "chat"
-      ? "Ask about the app, brainstorm, or just chat…"
+      ? "Ask about this app — what is it? how does X work?"
       : "Type the change you want built…";
     $send.textContent = m === "chat" ? "Ask" : "Send";
   }
@@ -6556,6 +6556,37 @@
         contentEl.innerHTML = question
           ? renderMarkdown("**The AI is asking:**\n\n" + question)
           : renderMarkdown("**Waiting for your reply.** The AI needs more info before it can continue.");
+        // Escape hatch: many "Needs input" prompts fire because the user
+        // asked a question that the Build executor interpreted as an
+        // ambiguous edit request. Offer a one-click switch to Ask mode so
+        // they can step out of the trap without typing a fake answer.
+        if (!contentEl.querySelector(".just-asking-btn")) {
+          const escape = document.createElement("div");
+          escape.style.cssText = "margin-top:10px;display:flex;gap:8px;flex-wrap:wrap;align-items:center;";
+          escape.innerHTML =
+            '<button type="button" class="btn btn-ghost just-asking-btn" ' +
+            'style="font-size:12px;padding:6px 10px;">' +
+            'Just asking a question? Switch to Ask mode' +
+            '</button>' +
+            '<span style="font-size:11px;color:var(--muted);">No edit will be made.</span>';
+          contentEl.appendChild(escape);
+          escape.querySelector(".just-asking-btn").addEventListener("click", function () {
+            // Clear the reply-mode trap so the next Send no longer POSTs to /answer.
+            setReplyMode(null);
+            // Switch the composer mode to Ask (chat) so the next message
+            // goes to the Q&A endpoint instead of the edit executor.
+            setMode("chat");
+            // Cancel the server-side task that's blocking on awaiting_input
+            // so it doesn't sit there forever. Fire-and-forget; UI doesn't
+            // depend on the result.
+            if (task.id) {
+              apiFetch("POST", "/" + task.id + "/cancel").catch(() => {});
+            }
+            // Focus the composer so the user can type their question.
+            $prompt.focus();
+            toast("Switched to Ask mode — type your question.", "info", 3500);
+          });
+        }
         // Activate reply mode so the input submits via /answer for this task
         if (awaitingReplyTo !== task.id) setReplyMode(task.id);
         // Allow a new answer to be sent — otherwise Send stays disabled from
@@ -6909,6 +6940,16 @@
       renderSelectionChip();
     }
   }
+  // Heuristic: does the user's text look like a question rather than an edit
+  // request? If so, Build mode will likely trigger NEEDS_INPUT ("what would
+  // you like me to change?") instead of answering — so offer Ask mode first.
+  function _looksLikeQuestion(text) {
+    const t = text.trim().toLowerCase();
+    if (!t) return false;
+    if (/[?]\s*$/.test(t)) return true;
+    return /^(what|why|how|who|where|when|which|is|are|do|does|did|can|could|should|would|will|explain|tell me|show me)\b/.test(t);
+  }
+
   async function handleSend() {
     const text = $prompt.value.trim();
     if (!text) return;
@@ -6918,6 +6959,21 @@
     if (chatMode === "chat") {
       $prompt.value = "";
       return submitChat(text);
+    }
+    // Build mode + question-shaped text: offer to send via Ask instead.
+    // Skip after the user has dismissed once this session.
+    if (_looksLikeQuestion(text) && !window._qHintDismissed) {
+      const useAsk = window.confirm(
+        "This looks like a question, not an edit request.\n\n" +
+        "Send it in 'Ask' mode to get an answer without trying to change anything?\n\n" +
+        "OK = use Ask mode (recommended)\nCancel = stay in Build mode"
+      );
+      if (useAsk) {
+        setMode("chat");
+        $prompt.value = "";
+        return submitChat(text);
+      }
+      window._qHintDismissed = true;
     }
     return submitEnhance();
   }
