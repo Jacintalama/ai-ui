@@ -225,31 +225,31 @@
     <template x-if="cart.items.length > 0">
       <div>
         <!-- Restaurant name -->
-        <template x-if="restaurants.find(r => r.id === cart.restaurantId)">
+        <template x-if="cartRestaurant">
           <p class="text-sm text-[var(--muted)] mb-4">
-            From <strong x-text="restaurants.find(r => r.id === cart.restaurantId).name"></strong>
+            From <strong x-text="cartRestaurant.name"></strong>
           </p>
         </template>
 
         <!-- Line items -->
         <div class="space-y-3 mb-6">
-          <template x-if="restaurants.find(r => r.id === cart.restaurantId)">
+          <template x-if="cartRestaurant">
             <div class="space-y-3">
               <template x-for="line in cart.items" :key="line.itemId">
                 <div class="flex items-center gap-3 bg-white rounded-xl p-3 border border-stone-100">
-                  <template x-if="restaurants.find(r => r.id === cart.restaurantId)">
+                  <template x-if="cartItem(line.itemId)">
                     <img
-                      :src="restaurants.find(r => r.id === cart.restaurantId).items.find(it => it.id === line.itemId) ? restaurants.find(r => r.id === cart.restaurantId).items.find(it => it.id === line.itemId).photo : ''"
-                      :alt="restaurants.find(r => r.id === cart.restaurantId).items.find(it => it.id === line.itemId) ? restaurants.find(r => r.id === cart.restaurantId).items.find(it => it.id === line.itemId).name : 'Cart item'"
+                      :src="cartItem(line.itemId).photo"
+                      :alt="cartItem(line.itemId).name"
                       width="56" height="56"
                       loading="lazy"
                       class="w-14 h-14 object-cover rounded-lg shrink-0" />
                   </template>
                   <div class="flex-1 min-w-0">
                     <p class="font-medium text-sm leading-snug"
-                      x-text="restaurants.find(r => r.id === cart.restaurantId).items.find(it => it.id === line.itemId)?.name ?? 'Item'"></p>
+                      x-text="cartItem(line.itemId)?.name ?? 'Item'"></p>
                     <p class="text-sm text-[var(--accent)] font-semibold mt-0.5"
-                      x-text="'$' + ((restaurants.find(r => r.id === cart.restaurantId).items.find(it => it.id === line.itemId)?.price ?? 0) * line.qty).toFixed(2)"></p>
+                      x-text="'$' + ((cartItem(line.itemId)?.price ?? 0) * line.qty).toFixed(2)"></p>
                   </div>
                   <!-- Stepper in cart -->
                   <div class="flex items-center gap-2 shrink-0">

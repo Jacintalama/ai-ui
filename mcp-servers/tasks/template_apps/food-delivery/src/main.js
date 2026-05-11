@@ -59,6 +59,15 @@ window.appState = () => ({
     return this.restaurants.find((r) => r.id === this.activeRestaurantId);
   },
 
+  get cartRestaurant() {
+    return this.restaurants.find((r) => r.id === this.cart.restaurantId) ?? null;
+  },
+
+  cartItem(itemId) {
+    if (!this.cartRestaurant) return null;
+    return this.cartRestaurant.items.find((it) => it.id === itemId) ?? null;
+  },
+
   get cartTotal() {
     if (!this.cart.items.length) return 0;
     const rest = this.restaurants.find((r) => r.id === this.cart.restaurantId);
