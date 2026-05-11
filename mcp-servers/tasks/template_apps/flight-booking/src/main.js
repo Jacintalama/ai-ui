@@ -81,8 +81,8 @@ window.appState = () => ({
 
   confirmBooking() {
     this.toast(`Confirmation sent (demo)`);
-    this.selectedFlight = null;
     this.setView("search");
+    this.selectedFlight = null;
   },
 
   toast(msg) {
