@@ -5831,7 +5831,16 @@
       // poll tick catches the running state.
       if (activeTab === "preview") refreshPreviewFrame();
     } catch (err) {
-      toast("Preview couldn't auto-start: " + (err.message || err), "error", 6000);
+      const msg = (err && err.message) ? err.message : String(err);
+      // "No built app for this task" fires when the page loads BEFORE the
+      // build pipeline has set built_app_slug (i.e. the agent is still
+      // running). It's not a real failure — the completion handler in
+      // updateAiBubble will retry maybeAutoStartPreview once the task
+      // finishes. Silence the toast for this transient case.
+      const isTransient = /no built app/i.test(msg) || /404/.test(msg);
+      if (!isTransient) {
+        toast("Preview couldn't auto-start: " + msg, "error", 6000);
+      }
       setStatus("idle", "Not running");
       $btnRun.disabled = false;
     } finally {
